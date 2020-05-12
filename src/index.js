@@ -23,6 +23,25 @@ async function createTaskHandler(req, res) {
   }
 }
 
+async function updateTaskHandler(req, res) {
+  let { url } = req;
+  let idQuery = url.split('?')[1];
+  let idKey = idQuery.split('=')[0];
+  let idValue = idQuery.split('=')[1];
+
+  if (idKey === 'id') {
+    await bodyParser(req);
+    database[idValue - 1] = req.body;
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.write(JSON.stringify(database));
+    res.end();
+  } else {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.write(JSON.stringify({ message: 'Invalid request query' }));
+    res.end();
+  }
+}
+
 const server = http.createServer((req, res) => {
   const { url, method } = req;
   console.log(`URL: ${url} - Method: ${method}`);
@@ -40,6 +59,8 @@ const server = http.createServer((req, res) => {
       if (url === '/tasks') {
         createTaskHandler(req, res);
       }
+    case 'PUT':
+      updateTaskHandler(req, res);
   }
 });
 server.listen(3000);
