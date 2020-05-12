@@ -8,6 +8,12 @@ function getTaskHandler(req, res) {
   res.end();
 }
 
+function createTaskHandler(req, res) {
+  res.writeHead(200, { 'Content-Type': 'application/json' });
+  res.write('Post request received');
+  res.end();
+}
+
 const server = http.createServer((req, res) => {
   const { url, method } = req;
   console.log(`URL: ${url} - Method: ${method}`);
@@ -20,6 +26,10 @@ const server = http.createServer((req, res) => {
       }
       if (url === '/tasks') {
         getTaskHandler(req, res);
+      }
+    case 'POST':
+      if (url === '/tasks') {
+        createTaskHandler(req, res);
       }
   }
 });
