@@ -1,4 +1,5 @@
 const http = require('http');
+const { bodyParser } = require('./lib/bodyParser');
 
 let database = [];
 
@@ -8,10 +9,18 @@ function getTaskHandler(req, res) {
   res.end();
 }
 
-function createTaskHandler(req, res) {
-  res.writeHead(200, { 'Content-Type': 'application/json' });
-  res.write('Post request received');
-  res.end();
+async function createTaskHandler(req, res) {
+  try {
+    await bodyParser(req);
+    database.push(req.body);
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.write(JSON.stringify(database));
+    res.end();
+  } catch (error) {
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.write('Invalid Data');
+    res.end();
+  }
 }
 
 const server = http.createServer((req, res) => {
