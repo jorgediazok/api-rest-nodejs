@@ -28,7 +28,7 @@ async function updateTaskHandler(req, res) {
   let idQuery = url.split('?')[1];
   let idKey = idQuery.split('=')[0];
   let idValue = idQuery.split('=')[1];
-//This is a comment too
+  //This is a comment too
   if (idKey === 'id') {
     await bodyParser(req);
     database[idValue - 1] = req.body;
@@ -61,6 +61,7 @@ const server = http.createServer((req, res) => {
       }
     case 'PUT':
       updateTaskHandler(req, res);
+    //This is a comment too
   }
 });
 server.listen(3000);
